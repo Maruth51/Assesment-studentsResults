@@ -1,9 +1,8 @@
 const sequelize = require("sequelize");
 
-const assesmentDB = new sequelize(process.env.DB_URL);
+const db = new sequelize(process.env.DB_URL);
 
-assesmentDB
-  .authenticate()
+db.authenticate()
   .then(() => {
     console.log("connection successful");
   })
@@ -12,4 +11,4 @@ assesmentDB
     console.error(err);
   });
 
-module.exports = assesmentDB;
+module.exports = db;

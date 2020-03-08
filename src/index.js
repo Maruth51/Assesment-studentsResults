@@ -1,12 +1,15 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const getStudent = require("./models/getDataFromDB");
-//const stuTable = require("./models/studentsModel");
+
 const expressHbs = require("express-handlebars");
 const path = require("path");
+//routers
+const studentRouter = require("./routers/student");
 //helpers
 const helpers = require("./views/helpers/helpers");
 const ifEqual = helpers.ifEqual;
+const formatIndex = helpers.formatIndex;
+const checkPass = helpers.checkPass;
 //
 
 const app = express();
@@ -15,44 +18,22 @@ const hbs = expressHbs.create({
   extname: ".hbs",
   layoutsDir: path.join(__dirname, "./views/layouts"),
   partialsDir: path.join(__dirname, "./views/partials"),
-  helpers: { ifEqual }
+  helpers: { ifEqual, formatIndex, checkPass }
 });
 
 app.engine(".hbs", hbs.engine);
 app.set("view engine", ".hbs");
 app.set("views", path.join(__dirname, "./views"));
 
+//midddlewares
 app.use(bodyParser.json());
-//create a server object:
+app.use("/students", studentRouter);
+
+//home page
 app.get("/", (req, res) => {
   res.render("home", {
     layout: "hero",
     pageTitle: "Home Page"
-  });
-});
-
-app.get("/students", (req, res) => {
-  const data = getStudent.getAllStudents();
-  data
-    .then(result => {
-      res.status(200).send(JSON.stringify(result, null, 2));
-    })
-    .catch(err => {
-      console.log(err);
-    });
-});
-// stuTable
-//   .findAll({ raw: true })
-//   .then(
-//   .catch(err => {
-//     res.status(400);
-//   });
-//});
-
-app.get("/web/students", (req, res) => {
-  res.render("students", {
-    layout: "navigation",
-    pageTitle: "Students"
   });
 });
 
