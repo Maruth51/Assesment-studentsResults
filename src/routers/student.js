@@ -3,13 +3,13 @@ const studentRouter = require("express").Router();
 
 studentRouter
   .get("/", (req, res) => {
-    const result = queryDB.getAllStudents();
+    const result = queryDB.getStudentInfo();
     result
       .then(data => {
         console.log(data);
-        res.render("studentMarks", {
+        res.render("studentInfo", {
           layout: "navigationbar",
-          pageTitle: "student Marks",
+          pageTitle: "Student Details",
           students: data
         });
       })
@@ -21,27 +21,50 @@ studentRouter
   .get("/rankings", async (req, res) => {
     try {
       let studentMaxMarks = {};
+      const students = await queryDB.getAllStudents();
       const [maths, matMetadata] = await queryDB.getMaxMarks("maths");
+      maths[0]["subject"] = "maths";
       const [physics, phyMetadata] = await queryDB.getMaxMarks("physics");
       const [chemistry, cheMetadata] = await queryDB.getMaxMarks("chemistry");
       const [english, engMetadata] = await queryDB.getMaxMarks("english");
       const [biology, bioMetadata] = await queryDB.getMaxMarks("biology");
+      english[0]["subject"] = "english";
+      physics[0]["subject"] = "Physics";
+      chemistry[0]["subject"] = "chemistry";
+      biology[0]["subject"] = "biology";
       // average marks
-      const [avgEachSub, avgMetadata] = await queryDB.getAvgMarks();
-      const [failCount, failMetadata] = await queryDB.getFailCount();
-      studentMaxMarks = {
-        maths: maths[0],
-        physics: physics[0],
-        chemistry: chemistry[0],
-        english: english[0],
-        biology: biology[0],
+      let [avgEachSub, avgMetadata] = await queryDB.getAvgMarks();
+      let [failCount, failMetadata] = await queryDB.getFailCount();
+      //avgEachSub = conJson(avgEachSub);
+      //failCount = conJson(failCount);
+      studentMaxMarks = [
+        maths[0],
+        physics[0],
+        chemistry[0],
+        english[0],
+        biology[0]
+      ];
+      res.render("studentReport", {
+        layout: "navigationbar",
+        pageTitle: "Exam Report",
+        students,
+        studentMaxMarks,
         avgEachSub,
         failCount
-      };
-      res.send(studentMaxMarks);
+      });
     } catch (e) {
       res.status(400).send(e);
     }
   });
 
+function conJson(obj) {
+  var newobj = {};
+  obj.forEach(ele => {
+    let [sub, value] = Object.keys(ele);
+    sub = ele.sub;
+    Object.assign(newobj, { [sub]: ele[value] });
+  });
+  console.log(newobj);
+  return newobj;
+}
 module.exports = studentRouter;

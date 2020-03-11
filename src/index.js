@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-
+const DarkSky = require("dark-sky");
+const moment = require("moment");
 const expressHbs = require("express-handlebars");
 const path = require("path");
 //routers
@@ -10,6 +11,7 @@ const helpers = require("./views/helpers/helpers");
 const ifEqual = helpers.ifEqual;
 const formatIndex = helpers.formatIndex;
 const checkPass = helpers.checkPass;
+const toTitleCase = helpers.toTitleCase;
 //
 
 const app = express();
@@ -18,7 +20,7 @@ const hbs = expressHbs.create({
   extname: ".hbs",
   layoutsDir: path.join(__dirname, "./views/layouts"),
   partialsDir: path.join(__dirname, "./views/partials"),
-  helpers: { ifEqual, formatIndex, checkPass }
+  helpers: { ifEqual, formatIndex, checkPass, toTitleCase }
 });
 
 app.engine(".hbs", hbs.engine);
@@ -35,6 +37,28 @@ app.get("/", (req, res) => {
     layout: "hero",
     pageTitle: "Home Page"
   });
+});
+
+//DarkSky Api
+const darksky = new DarkSky(process.env.DS_URL);
+app.get("/weather", async (req, res) => {
+  try {
+    const forecast = await darksky
+      .options({
+        latitude: "13.08784",
+        longitude: "80.27847",
+        exclude: ["minutely", "hourly"],
+        time: moment().subtract(1, "weeks")
+      })
+      .get();
+    res.status(200).json(forecast); // res.render("home", {
+    //   layout: "hero",
+    //   pageTitle: "Home Page"
+    // });
+  } catch (err) {
+    console.error(err);
+    res.status(400).send(err);
+  }
 });
 
 const server = app.listen(8080, () => {

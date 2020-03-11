@@ -1,5 +1,12 @@
 const { QueryTypes } = require("sequelize");
 const db = require("../config/config");
+async function getStudentInfo() {
+  const students = await db.query("select * from students order by id", {
+    type: QueryTypes.SELECT
+  });
+
+  return students;
+}
 async function getAllStudents() {
   try {
     return await db.query(
@@ -15,7 +22,7 @@ async function getAllStudents() {
 async function getMaxMarks(sub) {
   try {
     return await db.query(
-      `select students.id,first_name,${sub} from students inner join marks on students.id = marks.id where ${sub} in (select max(${sub}) from marks)`
+      `select students.id,first_name,${sub} as mark from students inner join marks on students.id = marks.id where ${sub} in (select max(${sub}) from marks)`
     );
   } catch (e) {
     console.log("some error ocurred");
@@ -41,4 +48,10 @@ async function getFailCount() {
   }
 }
 
-module.exports = { getAllStudents, getMaxMarks, getAvgMarks, getFailCount };
+module.exports = {
+  getAllStudents,
+  getMaxMarks,
+  getAvgMarks,
+  getFailCount,
+  getStudentInfo
+};

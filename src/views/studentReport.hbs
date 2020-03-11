@@ -1,0 +1,107 @@
+<div class="container">
+  <h1>Summary Report</h1>
+  <table class="table table-bordered">
+    <thead>
+      <tr bgcolor="76a0e3">
+        <th scope="col">#</th>
+        <th scope="col">Name</th>
+        <th scope="col">Maths</th>
+        <th scope="col">Physics</th>
+        <th scope="col">Chemistry</th>
+        <th scope="col">English</th>
+        <th scope="col">Biology</th>
+        <th scope="col">Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each students}}
+      <!--{{#with this}}-->
+      <tr>
+        <th scope="row">{{formatIndex @index}}</th>
+        <td>{{this.firstname }} {{this.lastname}}</td>
+        <td bgcolor={{checkPass this.maths}}>{{this.maths}}</td>
+        <td bgcolor={{checkPass this.physics}}>{{this.physics}}</td>
+        <td bgcolor={{checkPass this.chemistry}}>{{this.chemistry}}</td>
+        <td bgcolor={{checkPass this.english}}>{{this.english}}</td>
+        <td bgcolor={{checkPass this.biology}}>{{this.biology}}</td>
+        <td bgcolor="f2f5f7">{{this.total}}</td>
+      </tr>
+      <!-- {{/with}}-->
+      {{/each}}
+    </tbody>
+  </table>
+</div>
+
+<div class="container">
+  <h1>Top Score - Each Subject</h1>
+  <table class="table table-bordered">
+    <thead>
+      <tr class="table-active">
+        <th scope="col">#</th>
+        <th scope="col">Subject</th>
+        <th scope="col">Name</th>
+        <th scope="col">Mark</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each studentMaxMarks}}
+      <!--{{#with this}}-->
+      <tr>
+        <th scope="row">{{formatIndex @index}}</th>
+        <td>{{toTitleCase this.subject}}</td>
+        <td>{{toTitleCase this.first_name }}</td>
+        <td>{{this.mark}}</td>
+      </tr>
+      <!-- {{/with}}-->
+      {{/each}}
+    </tbody>
+  </table>
+</div>
+
+<div class="container">
+  <h1>Average Marks - Each Subject</h1>
+  <table class="table table-bordered">
+    <thead>
+      <tr class="table-active">
+        <th scope="col">#</th>
+        <th scope="col">Subject</th>
+        <th scope="col">Average</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each avgEachSub}}
+      <!--{{#with this}}-->
+      <tr>
+        <th scope="row">{{formatIndex @index}}</th>
+        <td>{{toTitleCase this.sub}}</td>
+        <td>{{toTitleCase this.avg }}</td>
+      </tr>
+      <!-- {{/with}}-->
+      {{/each}}
+    </tbody>
+  </table>
+</div>
+
+<div class="container">
+  <h2>No of Students scored less than 35 - Each Subject</h2>
+  <table class="table table-bordered">
+    <thead>
+      <tr class="table-active">
+        <th scope="col">#</th>
+        <th scope="col">Subject</th>
+        <th scope="col">Count</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each failCount}}
+      <!--{{#with this}}-->
+      <tr>
+        <th scope="row">{{formatIndex @index}}</th>
+        <td>{{toTitleCase this.sub}}</td>
+        <td>{{toTitleCase this.count }}</td>
+      </tr>
+      <!-- {{/with}}-->
+      {{/each}}
+    </tbody>
+  </table>
+</div>
