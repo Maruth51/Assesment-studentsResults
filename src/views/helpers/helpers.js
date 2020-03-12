@@ -16,5 +16,57 @@ const checkPass = score => {
     return "e81313";
   } else return "f2f5f7";
 };
+const convert = unixtimestamp => {
+  var months_arr = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec"
+  ];
 
-module.exports = { ifEqual, toTitleCase, formatIndex, checkPass };
+  // Convert timestamp to milliseconds
+  var date = new Date(parseInt(unixtimestamp, 10) * 1000);
+
+  // Year
+  var year = date.getFullYear();
+
+  // Month
+  var month = months_arr[date.getMonth()];
+
+  // Day
+  var day = date.getDate();
+
+  // Hours
+  var hours = date.getHours();
+
+  // Minutes
+  var minutes = "0" + date.getMinutes();
+
+  // Seconds
+  var seconds = "0" + date.getSeconds();
+
+  // Display date time in MM-dd-yyyy h:m:s format
+  var convdataTime =
+    month +
+    "-" +
+    day +
+    "-" +
+    year +
+    " " +
+    hours +
+    ":" +
+    minutes.substr(-2) +
+    ":" +
+    seconds.substr(-2);
+  return convdataTime;
+};
+
+module.exports = { ifEqual, toTitleCase, formatIndex, checkPass, convert };

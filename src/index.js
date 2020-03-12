@@ -4,14 +4,17 @@ const DarkSky = require("dark-sky");
 const moment = require("moment");
 const expressHbs = require("express-handlebars");
 const path = require("path");
+
 //routers
 const studentRouter = require("./routers/student");
+
 //helpers
 const helpers = require("./views/helpers/helpers");
 const ifEqual = helpers.ifEqual;
 const formatIndex = helpers.formatIndex;
 const checkPass = helpers.checkPass;
 const toTitleCase = helpers.toTitleCase;
+const convert = helpers.convert;
 //
 
 const app = express();
@@ -20,7 +23,7 @@ const hbs = expressHbs.create({
   extname: ".hbs",
   layoutsDir: path.join(__dirname, "./views/layouts"),
   partialsDir: path.join(__dirname, "./views/partials"),
-  helpers: { ifEqual, formatIndex, checkPass, toTitleCase }
+  helpers: { ifEqual, formatIndex, checkPass, toTitleCase, convert }
 });
 
 app.engine(".hbs", hbs.engine);
@@ -47,14 +50,16 @@ app.get("/weather", async (req, res) => {
       .options({
         latitude: "13.08784",
         longitude: "80.27847",
-        exclude: ["minutely", "hourly"],
-        time: moment().subtract(1, "weeks")
+        exclude: ["minutely", "hourly"]
+        //time: moment().subtract(1, "weeks")
       })
       .get();
-    res.status(200).json(forecast); // res.render("home", {
-    //   layout: "hero",
-    //   pageTitle: "Home Page"
-    // });
+    res.render("weatherReport", {
+      layout: "hero",
+      pageTitle: "Weather Forecast",
+      current: forecast.currently,
+      daily: forecast.daily.data
+    });
   } catch (err) {
     console.error(err);
     res.status(400).send(err);
