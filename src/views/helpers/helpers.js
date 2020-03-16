@@ -68,5 +68,14 @@ const convert = unixtimestamp => {
     seconds.substr(-2);
   return convdataTime;
 };
-
-module.exports = { ifEqual, toTitleCase, formatIndex, checkPass, convert };
+function toCelcius(valNum) {
+  return ((valNum - 32) / 1.8).toFixed(2);
+}
+module.exports = {
+  ifEqual,
+  toTitleCase,
+  formatIndex,
+  checkPass,
+  convert,
+  toCelcius
+};

@@ -15,6 +15,7 @@ const formatIndex = helpers.formatIndex;
 const checkPass = helpers.checkPass;
 const toTitleCase = helpers.toTitleCase;
 const convert = helpers.convert;
+const toCelcius = helpers.toCelcius;
 //
 
 const app = express();
@@ -23,7 +24,7 @@ const hbs = expressHbs.create({
   extname: ".hbs",
   layoutsDir: path.join(__dirname, "./views/layouts"),
   partialsDir: path.join(__dirname, "./views/partials"),
-  helpers: { ifEqual, formatIndex, checkPass, toTitleCase, convert }
+  helpers: { ifEqual, formatIndex, checkPass, toTitleCase, convert, toCelcius }
 });
 
 app.engine(".hbs", hbs.engine);
@@ -51,7 +52,7 @@ app.get("/weather", async (req, res) => {
         latitude: "13.08784",
         longitude: "80.27847",
         exclude: ["minutely", "hourly"]
-        //time: moment().subtract(1, "weeks")
+        //time: moment()
       })
       .get();
     res.render("weatherReport", {
