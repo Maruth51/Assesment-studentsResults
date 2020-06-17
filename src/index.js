@@ -44,7 +44,9 @@ app.get("/", (req, res) => {
 });
 
 //DarkSky Api
-const darksky = new DarkSky(process.env.DS_URL);
+const darksky = new DarkSky(
+  process.env.DS_URL || "4b62494295a703fbf86168b84aa123e3"
+);
 app.get("/weather", async (req, res) => {
   try {
     const forecast = await darksky
@@ -67,6 +69,6 @@ app.get("/weather", async (req, res) => {
   }
 });
 
-const server = app.listen(8080, () => {
+const server = app.listen(process.env.PORT || 8080, () => {
   console.log(`Server running in port ${server.address().port}`);
 });

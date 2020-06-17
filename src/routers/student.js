@@ -6,7 +6,6 @@ studentRouter
     const result = queryDB.getStudentInfo();
     result
       .then(data => {
-        console.log(data);
         res.render("studentInfo", {
           layout: "navigationbar",
           pageTitle: "Student Details",
