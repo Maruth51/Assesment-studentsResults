@@ -69,6 +69,6 @@ app.get("/weather", async (req, res) => {
   }
 });
 
-const server = app.listen(process.env.PORT || 8080, () => {
+const server = app.listen(process.env.PORT || "8080", () => {
   console.log(`Server running in port ${server.address().port}`);
 });
